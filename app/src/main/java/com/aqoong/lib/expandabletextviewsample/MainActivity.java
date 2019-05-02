@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onViewRecycled(@NonNull ItemHolder holder) {
-            Log.d("Main", "Expandable onViewRecycled index : " + holder.textView.getIndex());
             testList.get(holder.textView.getIndex()).setExpandableTextView(holder.textView);
         }
 

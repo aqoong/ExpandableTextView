@@ -76,7 +76,9 @@ public class ExpandableTextView extends AppCompatTextView {
         });
     }
 
-    public String getText(){return this.getTag().toString();}
+    public String getText(){
+        return this.getTag() != null ? this.getTag().toString() : "";
+    }
     public String getMoreText(){return this.strMore;}
     public int getCollapseLine() { return collapseLine; }
     public boolean isOverLine() { return isOverLine; }
@@ -90,9 +92,7 @@ public class ExpandableTextView extends AppCompatTextView {
         this.collapseLine = view.getCollapseLine();
         this.isOverLine = view.isOverLine();
         this.state = view.getState();
-        if(view.getIndex() == 1){
-            Log.i(TAG, String.format("setExpandableTextView !!! index : %d / isOverLine : %s / state : %s", this.index, isOverLine, state));
-        }
+
         setText(view.getIndex(), view.getText(), view.getMoreText());
     }
 
@@ -121,17 +121,21 @@ public class ExpandableTextView extends AppCompatTextView {
     }
     public ExpandableTextView setText(int index, String text, String moreText){
         this.index = index;
+        this.setText(text, moreText);
+
+        return this;
+    }
+
+    public ExpandableTextView setText(String text, String moreText){
         this.setTag(text);
         this.setText(text);
         this.strMore = moreText;
-        Log.i(TAG, String.format("index : %d / isOverLine : %s / state : %s", this.index, isOverLine, state));
 
         if(state.equals(STATE.COLLAPSE)) {
             checkOverLine();
         }else{
             this.setText(this.getTag().toString());
         }
-
         return this;
     }
 
