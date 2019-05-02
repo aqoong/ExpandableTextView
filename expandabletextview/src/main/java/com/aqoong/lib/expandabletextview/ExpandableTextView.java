@@ -16,21 +16,22 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ExpandableListView;
 
 public class ExpandableTextView extends AppCompatTextView {
     private final String TAG = getClass().getSimpleName();
 
     private int     collapseLine;
     private String  strMore;            //option
+    private int     index;
 
-    private boolean isOverLine;
+    private boolean isOverLine = false;
 
     public enum STATE{
         COLLAPSE,
         EXPAND
     }
-    private STATE state;
-    private Handler mHandler;
+    private STATE state = STATE.COLLAPSE;
 
     public ExpandableTextView(Context context) {
         this(context, null);
@@ -45,8 +46,6 @@ public class ExpandableTextView extends AppCompatTextView {
             strMore         = typedArray.getString(R.styleable.ExpandableTextView_text_more);
         }finally {
             typedArray.recycle();
-            state       = STATE.COLLAPSE;
-            isOverLine  = false;
 
             if(strMore  == null){
                 strMore = "More";
@@ -57,17 +56,10 @@ public class ExpandableTextView extends AppCompatTextView {
     }
 
     private void initView(){
-        mHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                appendMoreText(msg.what);
-            }
-        };
-
         checkOverLine();
     }
 
-    private void checkOverLine(){
+    public void checkOverLine(){
         final AppCompatTextView view = this;
         ViewTreeObserver observer = view.getViewTreeObserver();
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -76,12 +68,32 @@ public class ExpandableTextView extends AppCompatTextView {
                 getViewTreeObserver().removeOnPreDrawListener(this);
                 if(getLineCount() > collapseLine){
                     isOverLine = true;
-                    int lineEndIndex = getLayout().getLineEnd(collapseLine-1);
-                    mHandler.sendEmptyMessage(lineEndIndex);
+                    int lineEndIndex = getLayout().getLineEnd(collapseLine);
+                    appendMoreText(lineEndIndex);
                 }
                 return true;
             }
         });
+    }
+
+    public String getText(){return this.getTag().toString();}
+    public String getMoreText(){return this.strMore;}
+    public int getCollapseLine() { return collapseLine; }
+    public boolean isOverLine() { return isOverLine; }
+    public STATE getState() { return state; }
+
+    public int getIndex(){
+        return this.index;
+    }
+
+    public void setExpandableTextView(ExpandableTextView view){
+        this.collapseLine = view.getCollapseLine();
+        this.isOverLine = view.isOverLine();
+        this.state = view.getState();
+        if(view.getIndex() == 1){
+            Log.i(TAG, String.format("setExpandableTextView !!! index : %d / isOverLine : %s / state : %s", this.index, isOverLine, state));
+        }
+        setText(view.getIndex(), view.getText(), view.getMoreText());
     }
 
     private void appendMoreText(int lineEndIndex){
@@ -107,13 +119,17 @@ public class ExpandableTextView extends AppCompatTextView {
 
         return spannableString;
     }
-    public ExpandableTextView setText(String text, String moreText){
+    public ExpandableTextView setText(int index, String text, String moreText){
+        this.index = index;
         this.setTag(text);
         this.setText(text);
         this.strMore = moreText;
-        Log.i(TAG, String.format("isOverLine : %s / state : %s", isOverLine, state));
+        Log.i(TAG, String.format("index : %d / isOverLine : %s / state : %s", this.index, isOverLine, state));
+
         if(state.equals(STATE.COLLAPSE)) {
             checkOverLine();
+        }else{
+            this.setText(this.getTag().toString());
         }
 
         return this;

@@ -1,10 +1,11 @@
 package com.aqoong.lib.expandabletextviewsample;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ExpandableTextView textView;
     RecyclerView recyclerView;
-    ArrayList<String> testList;
+    ArrayList<ExpandableTextView> testList;
 
 
     @Override
@@ -26,14 +27,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.textView);
-        textView.setText("ABCDEFGHIJKfdfddf\n\n\nbyebye", "더보기");
+        textView.setText(0,"ABCDEFGHIJKfdfddf\n\n\nbyebye", "더보기");
 
         recyclerView = findViewById(R.id.listView);
 
 
         testList = new ArrayList<>();
         for(int i = 0  ; i < 20 ; i++){
-            testList.add("TEST multiline \n\n\n Index : "+i);
+            ExpandableTextView view = new ExpandableTextView(this);
+            view.setText(i, "This is Test Message.\n\nbyebye\nIndex : " + i, "show more");
+            testList.add(view);
         }
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -56,7 +59,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ItemHolder itemHolder, final int i) {
             itemHolder.title.setText("Index : " + i);
-            itemHolder.textView.setText(testList.get(i), "show more");
+            itemHolder.textView.setExpandableTextView(testList.get(i));
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull ItemHolder holder) {
+            Log.d("Main", "Expandable onViewRecycled index : " + holder.textView.getIndex());
+            testList.get(holder.textView.getIndex()).setExpandableTextView(holder.textView);
         }
 
         @Override
