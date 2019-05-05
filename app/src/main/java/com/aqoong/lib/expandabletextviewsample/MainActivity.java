@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.textView);
-        textView.setText(0,"ABCDEFGHIJKfdfddf\n\n\nbyebye", "더보기");
+        textView.setText("ABCDEFGHIJKfdfddf\n\n\nbyebye", "더보기");
 
         recyclerView = findViewById(R.id.listView);
 
