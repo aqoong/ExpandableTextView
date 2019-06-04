@@ -1,7 +1,6 @@
 # ExpandableTextView
 [Android CustomView] ExpandableTextView
 
-![Alt Text](https://github.com/aqoong/ExpandableTextView/raw/master/ExpandableTextViewSample_Video/ExpandableTextView.gif)
 ![Alt Text](https://github.com/aqoong/ExpandableTextView/raw/master/ExpandableTextViewSample_Video/ExpandableTextView_2.gif)
 
 [Custom View]
