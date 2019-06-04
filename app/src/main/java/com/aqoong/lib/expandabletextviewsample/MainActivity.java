@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textView);
         textView.setText("ABCDEFGHIJKfdfddf\n\n\nbyebye", "더보기");
+        textView.setState(ExpandableTextView.STATE.COLLAPSE);
 
         recyclerView = findViewById(R.id.listView);
 

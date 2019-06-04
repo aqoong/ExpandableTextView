@@ -63,7 +63,17 @@ public class ExpandableTextView extends AppCompatTextView {
                 if(getLineCount() > collapseLine){
                     isOverLine = true;
                     int lineEndIndex = getLayout().getLineEnd(collapseLine);
-                    appendMoreText(lineEndIndex);
+                    switch (state){
+                        case COLLAPSE:
+                            appendMoreText(lineEndIndex);
+                            break;
+                        case EXPAND:
+                            if(getTag() != null)
+                                setText(getTag().toString());
+                            else
+                                setText("error");
+                            break;
+                    }
                 }
                 return true;
             }
@@ -127,14 +137,19 @@ public class ExpandableTextView extends AppCompatTextView {
     }
     public ExpandableTextView setMoreText(String moreText){
         this.strMore = moreText;
+        this.setText(getText(), strMore);
+
         return this;
     }
+
+
     public ExpandableTextView setCollapseLine(int line){
         this.collapseLine = line;
         return this;
     }
     public void setState(STATE state){
         this.state = state;
+        initView();
     }
     public String getText(){
         return this.getTag() != null ? this.getTag().toString() : "";
