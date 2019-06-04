@@ -24,6 +24,7 @@ View for use on the same screen as SNS feeds.
   ```
   ExpandableTextView textView = findViewById(R.id.textView);
   textView.setText('any text', 'show more option text');
+  textView.setState(ExpandableTextView.STATE.COLLAPSE | EXPAND);
   ```
 ## Add ExpandableTextView Lib
   - project build.gradle
