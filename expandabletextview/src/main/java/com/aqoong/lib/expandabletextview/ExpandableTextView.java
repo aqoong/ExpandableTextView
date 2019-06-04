@@ -125,7 +125,17 @@ public class ExpandableTextView extends AppCompatTextView {
         }
         return this;
     }
-
+    public ExpandableTextView setMoreText(String moreText){
+        this.strMore = moreText;
+        return this;
+    }
+    public ExpandableTextView setCollapseLine(int line){
+        this.collapseLine = line;
+        return this;
+    }
+    public void setState(STATE state){
+        this.state = state;
+    }
     public String getText(){
         return this.getTag() != null ? this.getTag().toString() : "";
     }
